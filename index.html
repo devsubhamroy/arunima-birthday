@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1024" />
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>Happy Birthday Arunima! 🎂💖</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=Great+Vibes&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css?v=1.3" />
+  </head>
+  <body>
+    <!-- Floating background elements managed by CSS -->
+    <div class="decorations-bg"></div>
+
+    <div class="glass-wrapper">
+      <div class="container">
+        <div class="hearts-glow"></div>
+        <h1 class="birthday-title">Happy Birthday, Arunima💖! 🎂</h1> 
+        <p class="greeting-subtitle">
+          My favorite person in the whole wide world... 💖
+        </p>
+
+        <div class="gif-container">
+          <img
+            id="cat-gif"
+            src="https://media.tenor.com/EBV7OT7ACfwAAAAj/u-u-qua-qua-u-quaa.gif"
+            alt="Cute character waiting"
+          />
+        </div>
+
+        <p class="prompt-text" id="prompt-text">
+          I made a magical birthday surprise just for you. Ready to unlock it?
+          🎁✨ But first, tell me… do you love me 🥺❤️?
+        </p>
+
+        <div class="buttons">
+          <button id="yes-btn" onclick="handleYesClick()">YES! 😍</button>
+          <button id="no-btn" onclick="handleNoClick()">No 🙄</button>
+        </div>
+
+        <div id="tease-toast"></div>
+      </div>
+    </div>
+
+    <!-- Background Music -->
+    <audio id="bg-music" loop autoplay muted>
+      <source
+        src="music/senorita.mp3"
+        type="audio/mpeg"
+      />
+    </audio>
+
+    <!-- Music Control Float -->
+    <button id="music-toggle" onclick="toggleMusic()" title="Toggle music">
+      🔊
+    </button>
+
+    <script src="script.js?v=1.2"></script>
+  </body>
+</html>
