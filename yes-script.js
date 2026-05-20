@@ -1,27 +1,66 @@
-let musicPlaying = false
+let musicPlaying = true
 const music = document.getElementById('bg-music')
+
+// Restore music state from sessionStorage
+const savedMusicPlaying = sessionStorage.getItem('bgMusicPlaying')
+const savedMusicTime = sessionStorage.getItem('bgMusicTime')
+
+if (savedMusicPlaying !== null) {
+    musicPlaying = savedMusicPlaying === 'true'
+}
+
+let timeSynced = false
+const syncTime = () => {
+    if (timeSynced) return
+    if (savedMusicTime !== null) {
+        music.currentTime = parseFloat(savedMusicTime)
+        timeSynced = true
+    }
+}
+
+// Try syncing when metadata, canplay, or playing events fire
+music.addEventListener('loadedmetadata', syncTime)
+music.addEventListener('canplay', syncTime)
+music.addEventListener('playing', syncTime)
+
+// Fallback if already loaded
+if (music.readyState >= 1) {
+    syncTime()
+}
+
+// Keep updating saved time as music plays
+music.addEventListener('timeupdate', () => {
+    if (musicPlaying && !music.paused) {
+        sessionStorage.setItem('bgMusicTime', music.currentTime)
+    }
+})
 
 window.addEventListener('load', () => {
     // Initial sweet confetti burst when the page loads!
     launchConfetti()
 
-    // Autoplay music (since user clicked YES to get here, browser policies are satisfied)
+    // Autoplay music based on synced state
     music.volume = 0.3
-    music.play().then(() => {
-        musicPlaying = true
-        document.getElementById('music-toggle').textContent = '🔊'
-    }).catch(() => {
-        // Fallback in case of strict policies
-        const playOnInteraction = () => {
-            music.play().catch(() => {})
+    if (musicPlaying) {
+        music.play().then(() => {
             musicPlaying = true
             document.getElementById('music-toggle').textContent = '🔊'
-            document.removeEventListener('click', playOnInteraction)
-            document.removeEventListener('touchstart', playOnInteraction)
-        }
-        document.addEventListener('click', playOnInteraction)
-        document.addEventListener('touchstart', playOnInteraction)
-    })
+        }).catch(() => {
+            // Fallback in case of strict policies
+            const playOnInteraction = () => {
+                music.play().catch(() => {})
+                musicPlaying = true
+                document.getElementById('music-toggle').textContent = '🔊'
+                document.removeEventListener('click', playOnInteraction)
+                document.removeEventListener('touchstart', playOnInteraction)
+            }
+            document.addEventListener('click', playOnInteraction)
+            document.addEventListener('touchstart', playOnInteraction)
+        })
+    } else {
+        music.pause()
+        document.getElementById('music-toggle').textContent = '🔇'
+    }
 })
 
 function launchConfetti() {
@@ -146,9 +185,11 @@ function toggleMusic() {
         music.pause()
         musicPlaying = false
         document.getElementById('music-toggle').textContent = '🔇'
+        sessionStorage.setItem('bgMusicPlaying', 'false')
     } else {
         music.play().catch(() => {})
         musicPlaying = true
         document.getElementById('music-toggle').textContent = '🔊'
+        sessionStorage.setItem('bgMusicPlaying', 'true')
     }
 }

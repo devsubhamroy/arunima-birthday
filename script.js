@@ -54,33 +54,74 @@ const yesBtn = document.getElementById('yes-btn')
 const noBtn = document.getElementById('no-btn')
 const music = document.getElementById('bg-music')
 
-// Autoplay audio handling: start muted (bypasses browser autoplay policy), then unmute
-music.muted = true
-music.volume = 0.3
-music.play().then(() => {
-    music.muted = false
-}).catch(() => {
-    // Fallback: unmute on first click/touch interaction
-    const unmuteHandler = () => {
-        music.muted = false
-        music.play().catch(() => {})
-        document.removeEventListener('click', unmuteHandler)
-        document.removeEventListener('touchstart', unmuteHandler)
+// Restore music state from sessionStorage
+const savedMusicPlaying = sessionStorage.getItem('bgMusicPlaying')
+const savedMusicTime = sessionStorage.getItem('bgMusicTime')
+
+if (savedMusicPlaying !== null) {
+    musicPlaying = savedMusicPlaying === 'true'
+}
+
+let timeSynced = false
+const syncTime = () => {
+    if (timeSynced) return
+    if (savedMusicTime !== null) {
+        music.currentTime = parseFloat(savedMusicTime)
+        timeSynced = true
     }
-    document.addEventListener('click', unmuteHandler)
-    document.addEventListener('touchstart', unmuteHandler)
+}
+
+// Try syncing when metadata, canplay, or playing events fire
+music.addEventListener('loadedmetadata', syncTime)
+music.addEventListener('canplay', syncTime)
+music.addEventListener('playing', syncTime)
+
+// Fallback if already loaded
+if (music.readyState >= 1) {
+    syncTime()
+}
+
+// Keep updating saved time as music plays
+music.addEventListener('timeupdate', () => {
+    if (musicPlaying && !music.paused) {
+        sessionStorage.setItem('bgMusicTime', music.currentTime)
+    }
 })
+
+// Autoplay audio handling: start muted (bypasses browser autoplay policy), then unmute
+if (musicPlaying) {
+    music.muted = true
+    music.volume = 0.3
+    music.play().then(() => {
+        music.muted = false
+    }).catch(() => {
+        // Fallback: unmute on first click/touch interaction
+        const unmuteHandler = () => {
+            music.muted = false
+            music.play().catch(() => {})
+            document.removeEventListener('click', unmuteHandler)
+            document.removeEventListener('touchstart', unmuteHandler)
+        }
+        document.addEventListener('click', unmuteHandler)
+        document.addEventListener('touchstart', unmuteHandler)
+    })
+} else {
+    music.pause()
+    document.getElementById('music-toggle').textContent = '🔇'
+}
 
 function toggleMusic() {
     if (musicPlaying) {
         music.pause()
         musicPlaying = false
         document.getElementById('music-toggle').textContent = '🔇'
+        sessionStorage.setItem('bgMusicPlaying', 'false')
     } else {
         music.muted = false
-        music.play()
+        music.play().catch(() => {})
         musicPlaying = true
         document.getElementById('music-toggle').textContent = '🔊'
+        sessionStorage.setItem('bgMusicPlaying', 'true')
     }
 }
 
@@ -92,6 +133,11 @@ function handleYesClick() {
         showTeaseMessage(msg)
         return
     }
+    
+    // Save state exactly before transition
+    sessionStorage.setItem('bgMusicTime', music.currentTime)
+    sessionStorage.setItem('bgMusicPlaying', musicPlaying ? 'true' : 'false')
+    
     // Proceed to the celebration page
     window.location.href = 'yes.html'
 }
