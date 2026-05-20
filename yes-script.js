@@ -42,21 +42,23 @@ window.addEventListener('load', () => {
     // Autoplay music based on synced state
     music.volume = 0.3
     if (musicPlaying) {
-        music.play().then(() => {
-            musicPlaying = true
-            document.getElementById('music-toggle').textContent = '🔊'
-        }).catch(() => {
-            // Fallback in case of strict policies
-            const playOnInteraction = () => {
+        music.muted = true
+        
+        // Play muted first to satisfy browser autoplay
+        music.play().catch(() => {})
+
+        // Unmute on first user interaction (touch/click)
+        const unmuteHandler = () => {
+            if (musicPlaying) {
+                music.muted = false
                 music.play().catch(() => {})
-                musicPlaying = true
                 document.getElementById('music-toggle').textContent = '🔊'
-                document.removeEventListener('click', playOnInteraction)
-                document.removeEventListener('touchstart', playOnInteraction)
             }
-            document.addEventListener('click', playOnInteraction)
-            document.addEventListener('touchstart', playOnInteraction)
-        })
+            document.removeEventListener('click', unmuteHandler)
+            document.removeEventListener('touchstart', unmuteHandler)
+        }
+        document.addEventListener('click', unmuteHandler)
+        document.addEventListener('touchstart', unmuteHandler)
     } else {
         music.pause()
         document.getElementById('music-toggle').textContent = '🔇'

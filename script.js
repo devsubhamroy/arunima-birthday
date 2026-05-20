@@ -88,23 +88,25 @@ music.addEventListener('timeupdate', () => {
     }
 })
 
-// Autoplay audio handling: start muted (bypasses browser autoplay policy), then unmute
+// Autoplay audio handling: start muted (bypasses browser autoplay policy)
 if (musicPlaying) {
     music.muted = true
     music.volume = 0.3
-    music.play().then(() => {
-        music.muted = false
-    }).catch(() => {
-        // Fallback: unmute on first click/touch interaction
-        const unmuteHandler = () => {
+    
+    // Play muted first to satisfy browser autoplay
+    music.play().catch(() => {})
+
+    // Unmute on first user interaction (touch/click)
+    const unmuteHandler = () => {
+        if (musicPlaying) {
             music.muted = false
             music.play().catch(() => {})
-            document.removeEventListener('click', unmuteHandler)
-            document.removeEventListener('touchstart', unmuteHandler)
         }
-        document.addEventListener('click', unmuteHandler)
-        document.addEventListener('touchstart', unmuteHandler)
-    })
+        document.removeEventListener('click', unmuteHandler)
+        document.removeEventListener('touchstart', unmuteHandler)
+    }
+    document.addEventListener('click', unmuteHandler)
+    document.addEventListener('touchstart', unmuteHandler)
 } else {
     music.pause()
     document.getElementById('music-toggle').textContent = '🔇'
