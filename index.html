@@ -17,12 +17,14 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="style.css?v=1.5" />
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
   </head>
   <body>
     <!-- Floating background elements managed by CSS -->
     <div class="decorations-bg"></div>
 
-    <div class="glass-wrapper">
+    <!-- MAIN PAGE: Pleading Questionnaire -->
+    <div class="glass-wrapper" id="questionnaire-stage">
       <div class="container">
         <div class="hearts-glow"></div>
         <h1 class="birthday-title">Happy Birthday, Arunima💖! 🎂</h1> 
@@ -49,6 +51,60 @@
         </div>
 
         <div id="tease-toast"></div>
+      </div>
+    </div>
+
+    <!-- CELEBRATION PAGE (Initially Hidden) -->
+    <div class="glass-wrapper yes-wrapper" id="celebration-stage" style="display: none;">
+      <div class="container yes-container">
+        <h1 class="yes-title animate-bounce">YAY! You unlocked it! 🎉</h1>
+        
+        <!-- Stage 1: Celebration & Cake Presentation -->
+        <div id="cake-stage">
+          <div class="gif-container celebration-gif">
+            <img id="celebration-cat-gif" src="https://media.tenor.com/eNHbizSfVb0AAAAj/lovemode-cute.gif" alt="Celebrating pookie couple">
+          </div>
+          
+          <h2 class="section-title">Happy Birthday, Arunima! 🎂✨</h2>
+          <p class="sweet-whisper">My cute little Mona, I made a special birthday cake for you. Make a wish and blow out the candle!</p>
+
+          <!-- Stylized CSS Cake -->
+          <div class="cake-container" id="cake-container" onclick="blowCandle()">
+            <div class="cake">
+              <div class="candle">
+                <div class="flame" id="flame"></div>
+              </div>
+              <div class="cake-top"></div>
+              <div class="cake-middle"></div>
+              <div class="cake-bottom"></div>
+            </div>
+            <div class="plate"></div>
+          </div>
+          <p class="blow-instruction" id="blow-instruction">🕯️ Tap the candle to blow it out & make a wish! 🕯️</p>
+        </div>
+
+        <!-- Stage 2: Magical Love Letter (hidden until candle is blown) -->
+        <div id="letter-stage" style="display: none;">
+          <h2 class="section-title letters-glow">A Romantic Note For Mona... 💌</h2>
+          
+          <div class="envelope-wrapper" id="envelope-wrapper">
+            <div class="envelope" id="envelope" onclick="openEnvelope()">
+              <div class="flap"></div>
+              <div class="pocket"></div>
+              <div class="letter" id="letter">
+                <div class="letter-content">
+                  <h2>Happy Birthday, my Arunima! 🌸</h2>
+                  <p>My dearest Mona, you are the most precious person in my entire life. Every single day spent with you is filled with love, laughter, and endless happiness. 💖</p>
+                  <p>On this beautiful day, I want to promise you that I'll always be by your side, holding your hand through all the highs and lows. You make my world infinitely brighter and more beautiful. ✨</p>
+                  <p>I hope this birthday brings you all the joy, sweet smiles, and magic you deserve. Thank you for being the amazing, caring, and sweet person you are.</p>
+                  <p class="love-signature">Happy Birthday Pookie! 🎂🎉<br>With all my love, always and forever, <br><strong>Yeasu🐼🧿 ❤️</strong></p>
+                </div>
+              </div>
+              <div class="wax-seal" id="wax-seal">❤️</div>
+            </div>
+            <p class="tap-seal-instruction" id="seal-instruction">✨ Tap the heart seal to open your letter ✨</p>
+          </div>
+        </div>
       </div>
     </div>
 

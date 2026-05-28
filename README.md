@@ -11,10 +11,11 @@ A magical, interactive Happy Birthday surprise web page crafted with love by **S
 1. **Interactive Greeting Page**: 
    - A playful prompt asking: *“Do you love me? 🥺❤️”*
    - If they try to click **"No"**, the button runs away or triggers cute teasing toast messages, while the **"YES! 😍"** button grows larger and larger until it takes over!
-   - Features cute animated cat GIFs and romantic background music (*"Glue Song" by beabadoobee*).
+   - Features cute animated cat GIFs and romantic background music.
 
 2. **Magical Birthday Cake Stage**:
-   - Once "YES!" is clicked, she is presented with a beautifully styled interactive CSS birthday cake.
+   - Once "YES!" is clicked, she is transitioned instantly and seamlessly without a page reload (ensuring uninterrupted background music!).
+   - She is presented with a beautifully styled interactive CSS birthday cake.
    - She can make a wish and tap the candle flame to **blow it out**!
 
 3. **Custom Letter Reveal**:
@@ -22,6 +23,7 @@ A magical, interactive Happy Birthday surprise web page crafted with love by **S
    - Tapping the wax seal opens a gorgeous letter with a heartfelt romantic birthday message.
 
 4. **Premium Visuals & Responsiveness**:
+   - Seamless Single-Page Transition so that music does not stutter or get blocked by browser autoplay policies during page loading.
    - Glassmorphic container styling with a clean gradient backdrop.
    - Floating red/pink hearts and stars decorating the background.
    - Music toggle control floating at the bottom to easily mute/unmute.
@@ -32,10 +34,8 @@ A magical, interactive Happy Birthday surprise web page crafted with love by **S
 
 ```
 arunima-birthday/
-├── index.html       # Landing page (Do you love me? / Yes/No buttons)
-├── yes.html         # Birthday celebration (Blow cake, open letter)
-├── script.js        # Landing page logic (growth, funny toasts, music control)
-├── yes-script.js    # Interactive cake, candle, wax-seal & confetti logic
+├── index.html       # Combined landing, greeting, cake and letter stages (All-in-one SPA)
+├── script.js        # Combined app logic (navigation, button-growth, cake/candle/confetti & music)
 ├── style.css        # Full design system (CSS variables, Glassmorphism, animations)
 └── music/           # Background music folder (Glue Song mp3)
 ```
